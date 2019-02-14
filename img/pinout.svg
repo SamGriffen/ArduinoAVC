@@ -26,11 +26,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="917.53656"
-     inkscape:cy="268.24706"
+     inkscape:zoom="0.7"
+     inkscape:cx="506.79155"
+     inkscape:cy="295.89726"
      inkscape:document-units="mm"
-     inkscape:current-layer="g5499-7-1-3-4-9-5-0-6-3-2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1029"
@@ -1216,71 +1216,66 @@
        y="0"
        x="0"
        style="display:inline;fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    <g
-       transform="matrix(0.2822222,0,0,0.2822222,43.37223,43.872236)"
-       style="display:inline;fill:#6c7a89;fill-opacity:1;stroke:none;stroke-opacity:1"
-       id="g4879">
-      <use
-         height="100%"
-         width="100%"
-         id="use4731"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,132.72502)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <use
-         height="100%"
-         width="100%"
-         id="use4733"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,155.76943)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <use
-         height="100%"
-         width="100%"
-         id="use4735"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,178.81388)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <use
-         height="100%"
-         width="100%"
-         id="use4737"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,201.85828)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <use
-         height="100%"
-         width="100%"
-         id="use4739"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,224.90275)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <use
-         height="100%"
-         width="100%"
-         id="use4741"
-         transform="matrix(3.5433074,0,0,3.5433074,-561.68114,247.94719)"
-         xlink:href="#use4573"
-         inkscape:tiled-clone-of="#use4573"
-         y="0"
-         x="0"
-         style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,81.330183)"
+       id="use4731"
+       width="100%"
+       height="100%" />
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,87.833827)"
+       id="use4733"
+       width="100%"
+       height="100%" />
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,94.337483)"
+       id="use4735"
+       width="100%"
+       height="100%" />
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,100.84112)"
+       id="use4737"
+       width="100%"
+       height="100%" />
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,107.34478)"
+       id="use4739"
+       width="100%"
+       height="100%" />
+    <use
+       style="fill:#6c7a89;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(-115.14666,113.84844)"
+       id="use4741"
+       width="100%"
+       height="100%" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.3866663px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ecf0f1;fill-opacity:1;stroke:none;stroke-width:0.28222221px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1549,6 +1544,231 @@
            x="268.95959"
            sodipodi:role="line"
            id="tspan5916">Line Sensor 6</tspan></text>
+    </g>
+    <g
+       transform="translate(-1.0156925e-6,-63.155654)"
+       id="g5499-7-1-3-4-9-5-0-6-3-2-4">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-6-4-7-4-3-5-3"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#ff6c6c;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-9-5-4-2-9-9-6"
+         y="276.04385"
+         x="268.95959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:end;text-anchor:end;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="268.95959"
+           sodipodi:role="line"
+           id="tspan5916-8">Line Sensor 7</tspan></text>
+    </g>
+    <g
+       transform="translate(-1.0156925e-6,-69.659315)"
+       id="g5499-7-1-3-4-9-5-0-6-3-2-4-9">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-6-4-7-4-3-5-3-8"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#ff6c6c;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-9-5-4-2-9-9-6-8"
+         y="276.04385"
+         x="268.95959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:end;text-anchor:end;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="268.95959"
+           sodipodi:role="line"
+           id="tspan5916-8-2">Line Sensor 8</tspan></text>
+    </g>
+    <g
+       transform="translate(-1.0156925e-6,-76.162957)"
+       id="g5499-7-1-3-4-9-0">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-6-5"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#ff9f5f;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-9-8"
+         y="276.04385"
+         x="268.95959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:end;text-anchor:end;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="268.95959"
+           id="tspan5492-9-5-8-4-9-4"
+           sodipodi:role="line">Left Motor Control</tspan></text>
+    </g>
+    <g
+       transform="translate(-1.0156925e-6,-82.666612)"
+       id="g5499-7-1-3-4-9-0-3">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-6-5-5"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#ff9f5f;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-9-8-5"
+         y="276.04385"
+         x="268.95959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:end;text-anchor:end;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="268.95959"
+           id="tspan5492-9-5-8-4-9-4-5"
+           sodipodi:role="line">Right Motor Backward</tspan></text>
+    </g>
+    <use
+       style="display:inline;fill:#6c7a89;fill-opacity:1;stroke:none;stroke-opacity:1"
+       x="0"
+       y="0"
+       inkscape:tiled-clone-of="#use4573"
+       xlink:href="#use4573"
+       transform="translate(9.6093743e-7,26.014634)"
+       id="use4605-0"
+       width="100%"
+       height="100%" />
+    <g
+       transform="translate(9.6093743e-7,-89.170255)"
+       id="g5499-7-1-3-4-9-0-3-4">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-6-5-5-3"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#ff9f5f;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-9-8-5-0"
+         y="276.04385"
+         x="268.95959"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:end;text-anchor:end;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="268.95959"
+           id="tspan5492-9-5-8-4-9-4-5-4"
+           sodipodi:role="line">Left Motor Backward</tspan></text>
+    </g>
+    <g
+       transform="matrix(-1,0,0,1,296.9007,-1.3364485)"
+       id="g5499-7-1-3-4-3">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-8"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#bb7fff;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-98"
+         y="276.04385"
+         x="-269.35379"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"
+         transform="scale(-1,1)"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:start;text-anchor:start;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="-269.35379"
+           id="tspan5492-9-5-8-4-7"
+           sodipodi:role="line">Left IR</tspan></text>
+    </g>
+    <g
+       transform="matrix(-1,0,0,1,296.9007,-7.9527632)"
+       id="g5499-7-1-3-4-3-3">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-8-0"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#bb7fff;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-98-3"
+         y="276.04385"
+         x="-269.35379"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"
+         transform="scale(-1,1)"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:start;text-anchor:start;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="-269.35379"
+           id="tspan5492-9-5-8-4-7-4"
+           sodipodi:role="line">Middle IR</tspan></text>
+    </g>
+    <g
+       transform="matrix(-1,0,0,1,296.9007,-14.343769)"
+       id="g5499-7-1-3-4-3-3-0">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-8-0-1"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#bb7fff;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-98-3-6"
+         y="276.04385"
+         x="-269.35379"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"
+         transform="scale(-1,1)"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:start;text-anchor:start;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="-269.35379"
+           id="tspan5492-9-5-8-4-7-4-2"
+           sodipodi:role="line">Right IR</tspan></text>
+    </g>
+    <g
+       transform="matrix(-1,0,0,1,296.9007,-27.351062)"
+       id="g5499-7-1-3-4-3-3-0-8">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-8-0-1-6"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#99ff9c;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-98-3-6-7"
+         y="276.04385"
+         x="-269.35379"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"
+         transform="scale(-1,1)"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:start;text-anchor:start;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="-269.35379"
+           id="tspan5492-9-5-8-4-7-4-2-2"
+           sodipodi:role="line">DIP Switch 1</tspan></text>
+    </g>
+    <g
+       transform="matrix(-1,0,0,1,296.9007,-33.854706)"
+       id="g5499-7-1-3-4-3-3-0-8-5">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path5490-3-7-0-3-8-0-1-6-9"
+         d="m 206.04427,275.13677 6.94531,1.7549 H 268.352"
+         style="fill:none;stroke:#99ff9c;stroke-width:1.05833328;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text5494-0-0-3-9-98-3-6-7-4"
+         y="276.04385"
+         x="-269.35379"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'ITC Avant Garde Gothic';-inkscape-font-specification:'ITC Avant Garde Gothic Bold';letter-spacing:0px;word-spacing:0px;fill:#262626;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         xml:space="preserve"
+         transform="scale(-1,1)"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333311px;font-family:monospace;-inkscape-font-specification:'monospace Bold';text-align:start;text-anchor:start;fill:#262626;fill-opacity:1;stroke-width:0.26458332"
+           y="276.04385"
+           x="-269.35379"
+           id="tspan5492-9-5-8-4-7-4-2-2-1"
+           sodipodi:role="line">DIP Switch 2</tspan></text>
     </g>
   </g>
 </svg>
