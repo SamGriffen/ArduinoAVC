@@ -12,6 +12,7 @@ class PID{
 		PID(double kp, double ki, double kd); // Constructor for PID controller. Takes Kp, Ki, and Kd values
 		double process(int target, int reading); // Processes the PID algorithm. Takes the target value, and the read value (For example this may be for line following, with target being 500, and the read value being 250). Outputs the output value. Which is essentially the error multiplied by Kp, the error diff multiplied by Kd, and the total error multipled by Ki
 		void reset(); // Resets all internal values
+		void setConstants(double kp, double ki, double kd); // Resets the internal constants
 	private:
 		// Store the gains for P, I, and D
 		double _kp;

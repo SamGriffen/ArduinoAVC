@@ -8,6 +8,9 @@
 #ifndef VicMoto_h
 #define VicMoto_h
 
+#define VICMOTO_MAX_SPEED 255
+#define VICMOTO_MIN_SPEED 0
+
 #include <Arduino.h>
 
 class VicMoto{

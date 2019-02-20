@@ -37,11 +37,12 @@ void VicMoto::begin(){
  * @param right Speed of the right motor. -255 is backwards full speed, 0 is stationary, 255 is forward fullspeed
  */
 void VicMoto::setMotors(short int left, short int right){
+
 	// Set the left motor state.
-	analogWrite(_left, abs(left)); 			 // Set the control pin to the absolute value of left
+	analogWrite(_left, constrain(abs(left), VICMOTO_MIN_SPEED, VICMOTO_MAX_SPEED)); 			 // Set the control pin to the absolute value of left
 	digitalWrite(_left_back, (left <= 0)); 	 // Set the back toggle to on if the value is negative
 
 	// Set the right motor state.
-	analogWrite(_right, abs(right)); 		 // Set the control pin to the absolute value of right
+	analogWrite(_right, constrain(abs(right), VICMOTO_MIN_SPEED, VICMOTO_MAX_SPEED)); 		 // Set the control pin to the absolute value of right
 	digitalWrite(_right_back, (right <= 0)); // Set the back toggle to on if the value is negative
 }

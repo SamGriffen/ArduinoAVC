@@ -53,3 +53,15 @@ void PID::reset(){
 	_previous_error = 0;
 	_total_error = 0;
 }
+
+/**
+ * Method to change the internal constants
+ * @param kp [description]
+ * @param ki [description]
+ * @param kd [description]
+ */
+void PID::setConstants(double kp, double ki, double kd){
+	_kp = kp;
+	_ki = ki;
+	_kd = kd;
+}

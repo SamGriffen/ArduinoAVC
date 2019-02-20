@@ -9,7 +9,14 @@
 
 #define TESTING					true // Flag for testing - Sets serial up
 
+#define FOLLOW_MAX_SPEED 255
+#define FOLLOW_MIN_SPEED 0
+
 // Initialise the sensor array - As far as I can tell it is some form of Pololu QTR-RC array. Documentation of the library found here: https://www.pololu.com/docs/0J19/3
+
+#define P_PIN A5
+#define D_PIN A4
+
 QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
 
 unsigned int sensor_values[NUM_SENSORS]; // Values from the line sensor
@@ -19,7 +26,8 @@ VicMoto motors;
 
 // Initialise the line following PID
 // PID linePID(1.9, 0, 5);
-PID linePID(1, 0, 1);
+// PID linePID(1.8, 0, 4.8);
+PID linePID(0.4, 0, 0.2);
 
 
 // Function declarations for line following control
@@ -27,20 +35,29 @@ void calibrate(int motor_speed); // Calibrates the line sensor
 void findLine(int speed); // Finds the line
 void follow(int speed); // Follows the line
 
+double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh); // Map a number doing double math
 
 void setup(){
+	if(TESTING)Serial.begin(9600); // Begin serial if we are testing
+	Serial.print("KP: ");
+	Serial.println(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 1.0));
+	Serial.print("KD: ");
+	Serial.println(mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 2.0));
+	
 	motors.begin(); // Setup the motor driver
 
 	pinMode(STATUS_LED, OUTPUT);
 
+	pinMode(P_PIN, INPUT);
+	pinMode(D_PIN, INPUT);
+
 	calibrate(65); // Calibrate the line sensor
 	findLine(60); // Find the line
-
-	if(TESTING)Serial.begin(9600); // Begin serial if we are testing
 }
 
 void loop(){
-	follow(140); // Follow the line
+	linePID.setConstants(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 1.0), 0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 2.0));
+	follow(90); // Follow the line
 }
 
 /**
@@ -48,8 +65,15 @@ void loop(){
  * @param speed Base speed to folow with
  */
 void follow(int speed){
-	int dv = linePID.process(3500, line.readLine(sensor_values))/5; // Get the result of a PID process - Divide by 5 simply to make the constants larger numbers
-	motors.setMotors(speed+dv, speed-dv); // Set motor speeds
+	int dv = linePID.process(3500, line.readLine(sensor_values))/10; // Get the result of a PID process - Divide by 5 simply to make the constants larger numbers
+	if(false){
+		Serial.print("Left: ");
+		Serial.print(speed+dv);
+		Serial.print("DV: ");
+		Serial.println(dv);
+	}
+	// motors.setMotors(constrain(abs(speed+dv), FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED), constrain(abs(speed-dv), FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED)); // Set motor speeds
+	motors.setMotors(abs(speed+dv), abs(speed-dv)); // Set motor speeds
 }
 
 /**
@@ -78,6 +102,8 @@ void calibrate(int motor_speed){
 	bool going_up = true;
 
 	int threshold = 50; // Threshold where motors stop
+
+	// motors.setMotors(200,-200);
 
 	for (int i = 0; i < 400; i++){
 		if(going_up && cur_speed >=motor_speed){ // If we have overshot the max, or are at the max, flip dirtection
@@ -121,4 +147,18 @@ void calibrate(int motor_speed){
 		Serial.println();
 		Serial.println();
 	}
+}
+
+/**
+ * Acts like the Arduino map function, but does double math
+ * @param  value    [description]
+ * @param  fromLow  [description]
+ * @param  fromHigh [description]
+ * @param  toLow    [description]
+ * @param  toHigh   [description]
+ * @return          [description]
+ */
+double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh){
+	double prop = value/(fromHigh - fromLow);
+	return (prop * (toHigh - toLow))+toLow;
 }
