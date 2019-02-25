@@ -41,7 +41,7 @@ VicMoto motors;
 // Initialise the line following PID
 // PID linePID(1.9, 0, 5);
 // PID linePID(1.8, 0, 4.8);
-PID linePID(0.22, 0, 0.1);
+PID linePID(0.28, 0, 0.15);
 // PID linePID(1.09, 0, 0.2);
 
 
