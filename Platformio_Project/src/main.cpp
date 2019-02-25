@@ -10,12 +10,26 @@
 #define TESTING					true // Flag for testing - Sets serial up
 
 #define FOLLOW_MAX_SPEED 255
-#define FOLLOW_MIN_SPEED 0
+#define FOLLOW_MIN_SPEED -255
+
+// Pins for sensor readings
+#define LEFT_IR					A5
+#define MID_IR					A4
+#define RIGHT_IR				A3
 
 // Initialise the sensor array - As far as I can tell it is some form of Pololu QTR-RC array. Documentation of the library found here: https://www.pololu.com/docs/0J19/3
 
-#define P_PIN A5
-#define D_PIN A4
+// Definitions for the potentiometers that may be used for tuning
+// #define P_PIN A5
+// #define D_PIN A4
+
+// Array to store testing states.
+/**
+ * testing[0] - Stores whether to print motor setting data in the main loop
+ * testing[1] - Stores whether to print mid IR sensor readings
+ *
+ */
+bool testing[2] = {0, 1};
 
 QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
 
@@ -27,7 +41,8 @@ VicMoto motors;
 // Initialise the line following PID
 // PID linePID(1.9, 0, 5);
 // PID linePID(1.8, 0, 4.8);
-PID linePID(0.4, 0, 0.2);
+PID linePID(0.22, 0, 0.1);
+// PID linePID(1.09, 0, 0.2);
 
 
 // Function declarations for line following control
@@ -35,29 +50,47 @@ void calibrate(int motor_speed); // Calibrates the line sensor
 void findLine(int speed); // Finds the line
 void follow(int speed); // Follows the line
 
+// Functions for obstacle avoidance
+bool isBlocked(); // Returns true if the robot has been obstructed, false otherwise
+void avoidObstacle(); // Manouvers the object around an obstacle. Looks for the line to return and for there to be nothing in front of the robot.
+
 double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh); // Map a number doing double math
 
 void setup(){
-	if(TESTING)Serial.begin(9600); // Begin serial if we are testing
-	Serial.print("KP: ");
-	Serial.println(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 1.0));
-	Serial.print("KD: ");
-	Serial.println(mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 2.0));
-	
+
+	// Only use for potentiometer tuning
+	// pinMode(P_PIN, INPUT);
+	// pinMode(D_PIN, INPUT);
+
+	// Setup the IR sensor pins
+	pinMode(LEFT_IR, INPUT);
+	pinMode(MID_IR, INPUT);
+	pinMode(RIGHT_IR, INPUT);
+
+	if(true){
+		Serial.begin(9600); // Begin serial if we are testing
+
+		//Used for reading the potentiometers that may be used for tuning
+		// Serial.print("KP: ");
+		// Serial.println(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 5.0));
+		// Serial.print("KD: ");
+		// Serial.println(mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 5.0));
+	}
+
 	motors.begin(); // Setup the motor driver
 
 	pinMode(STATUS_LED, OUTPUT);
 
-	pinMode(P_PIN, INPUT);
-	pinMode(D_PIN, INPUT);
+
 
 	calibrate(65); // Calibrate the line sensor
 	findLine(60); // Find the line
 }
 
 void loop(){
-	linePID.setConstants(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 1.0), 0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 2.0));
-	follow(90); // Follow the line
+	// For potentiometer tuning
+	// linePID.setConstants(mapDouble(analogRead(P_PIN), 0.00, 1023.0, 0.0, 0.5), 0.0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 0.5));
+	follow(53); // Follow the line
 }
 
 /**
@@ -66,14 +99,17 @@ void loop(){
  */
 void follow(int speed){
 	int dv = linePID.process(3500, line.readLine(sensor_values))/10; // Get the result of a PID process - Divide by 5 simply to make the constants larger numbers
-	if(false){
+	if(TESTING && testing[0]){
 		Serial.print("Left: ");
 		Serial.print(speed+dv);
-		Serial.print("DV: ");
+		Serial.print(" Right: ");
+		Serial.print(speed-dv);
+		Serial.print(" DV: ");
 		Serial.println(dv);
 	}
-	// motors.setMotors(constrain(abs(speed+dv), FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED), constrain(abs(speed-dv), FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED)); // Set motor speeds
-	motors.setMotors(abs(speed+dv), abs(speed-dv)); // Set motor speeds
+	if(TESTING && testing[1])Serial.println(analogRead(MID_IR));
+	motors.setMotors(constrain(speed+dv, FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED), constrain(speed-dv, FOLLOW_MIN_SPEED, FOLLOW_MAX_SPEED)); // Set motor speeds
+
 }
 
 /**
@@ -148,6 +184,29 @@ void calibrate(int motor_speed){
 		Serial.println();
 	}
 }
+
+
+/* Functions for moving around obstacles */
+
+/** Method to determine whether the robot is blocked by an obstacle. Returns true if blocked, false otherwise. Reads from the front sensor
+*	As far as my testing shows, the reading increases as objects get closer
+*	Max - Seems to be about 620 @ ~2cm away from sensor
+* 	Min - 0, however radiant IR seems to float it up to a reading of ~15
+*/
+bool isBlocked(){
+	short threshold = 266; // Store the maximum number for an object that is MORE than 100mm away from the sensor
+	return analogRead(MID_IR) > threshold; // Return a boolean representing whether the robot has been obstructed
+}
+
+/**
+ * Function to move the robot around an obstacle
+ */
+void avoidObstacle(){
+	//
+}
+
+
+/**
 
 /**
  * Acts like the Arduino map function, but does double math
