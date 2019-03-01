@@ -27,9 +27,9 @@
 /**
  * testing[0] - Stores whether to print motor setting data in the main loop
  * testing[1] - Stores whether to print mid IR sensor readings
- *
+ * testing[2] - Stores whether to print data from the right sensor while rotating to be in line with an obstacle
  */
-bool testing[2] = {0, 1};
+bool testing[3] = {0, 0, 1};
 
 QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
 
@@ -83,14 +83,17 @@ void setup(){
 
 
 
-	calibrate(65); // Calibrate the line sensor
-	findLine(60); // Find the line
+	//calibrate(65); // Calibrate the line sensor
+	//findLine(60); // Find the line
 }
 
 void loop(){
 	// For potentiometer tuning
 	// linePID.setConstants(mapDouble(analogRead(P_PIN), 0.00, 1023.0, 0.0, 0.5), 0.0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 0.5));
-	follow(53); // Follow the line
+	// follow(53); // Follow the line
+	if(isBlocked()){
+		avoidObstacle();
+	}
 }
 
 /**
@@ -202,11 +205,21 @@ bool isBlocked(){
  * Function to move the robot around an obstacle
  */
 void avoidObstacle(){
-	//
+	int tolerance = 30; // Margin of error allowed when correcting position to align with the object
+
+	// Spin until the right sensor is aligned with the object
+	int maxRead = 0;
+	int reading = 0; // Stores the IR reading
+	motors.setMotors(-60,60); // Set the robot spinning
+	while(analogRead(RIGHT_IR) > maxRead - tolerance){ // While the reading is still increasing
+		reading = analogRead(RIGHT_IR);
+		if(reading > maxRead)maxRead = analogRead(RIGHT_IR); // Save the new reading if it is greater than the maximum
+		Serial.println(reading);
+	}
+
+	// Once the loop cancels, we have reached a drop in readings, start following the object
+	motors.setMotors(0,0);
 }
-
-
-/**
 
 /**
  * Acts like the Arduino map function, but does double math
