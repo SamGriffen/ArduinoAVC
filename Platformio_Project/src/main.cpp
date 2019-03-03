@@ -12,12 +12,22 @@
 #define FOLLOW_MAX_SPEED 255
 #define FOLLOW_MIN_SPEED -255
 
+#define IR_THRESHOLD 266 			// Store the maximum number for an object that is MORE than 100mm away from the sensor
+#define IR_OBJECT_THRESHOLD 310		// IR reading to target when following an object
+
 // Pins for sensor readings
 #define LEFT_IR					A5
 #define MID_IR					A4
 #define RIGHT_IR				A3
 
+// Pins for DIP Switch
+#define DIP_1	A1
+#define DIP_2	A0
+
 // Initialise the sensor array - As far as I can tell it is some form of Pololu QTR-RC array. Documentation of the library found here: https://www.pololu.com/docs/0J19/3
+QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
+
+unsigned int sensor_values[NUM_SENSORS]; // Values from the line sensor
 
 // Definitions for the potentiometers that may be used for tuning
 // #define P_PIN A5
@@ -31,10 +41,6 @@
  */
 bool testing[3] = {0, 0, 1};
 
-QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
-
-unsigned int sensor_values[NUM_SENSORS]; // Values from the line sensor
-
 // Initialise the motor driver
 VicMoto motors;
 
@@ -45,14 +51,22 @@ PID linePID(0.28, 0, 0.15);
 // PID linePID(1.09, 0, 0.2);
 
 
+// Initialise the wall following PID
+PID wallPID(0.25,0,0.15);
+
+// Funtion declarations for different programs
+void lineFollower();		// Program for following a line - Program 0
+void obstacleAvoid();		// Program for roaming artound avoiding obstacles - Program 1
+void lineFollowerAvoid();	// Program for line following, avoiding any obstacles on the line - Program 2
+
 // Function declarations for line following control
 void calibrate(int motor_speed); // Calibrates the line sensor
 void findLine(int speed); // Finds the line
-void follow(int speed); // Follows the line
+void followLine(int speed); // Follows the line
 
 // Functions for obstacle avoidance
 bool isBlocked(); // Returns true if the robot has been obstructed, false otherwise
-void avoidObstacle(); // Manouvers the object around an obstacle. Looks for the line to return and for there to be nothing in front of the robot.
+void avoidObstacle(int baseSpeed); // Manouvers the object around an obstacle. Looks for the line to return and for there to be nothing in front of the robot.
 
 double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh); // Map a number doing double math
 
@@ -67,14 +81,8 @@ void setup(){
 	pinMode(MID_IR, INPUT);
 	pinMode(RIGHT_IR, INPUT);
 
-	if(true){
+	if(TESTING){
 		Serial.begin(9600); // Begin serial if we are testing
-
-		//Used for reading the potentiometers that may be used for tuning
-		// Serial.print("KP: ");
-		// Serial.println(mapDouble(analogRead(P_PIN), 0.0, 1023.0, 0.0, 5.0));
-		// Serial.print("KD: ");
-		// Serial.println(mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 5.0));
 	}
 
 	motors.begin(); // Setup the motor driver
@@ -90,17 +98,46 @@ void setup(){
 void loop(){
 	// For potentiometer tuning
 	// linePID.setConstants(mapDouble(analogRead(P_PIN), 0.00, 1023.0, 0.0, 0.5), 0.0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 0.5));
-	// follow(53); // Follow the line
-	if(isBlocked()){
-		avoidObstacle();
-	}
+
+	short program = digitalRead(DIP_1) && (digitalRead(DIP_2) << 1); // Read the dipswitch
+	Serial.println(program);
+}
+
+/**
+ * Functions for what are essentially seperate programs on the robot
+ *
+ * The dipswitch is set as a binary number - Giving 4 different programs
+ */
+
+/**
+ * Program 0
+ * Method for controlling the line follower.
+ */
+void lineFollower(){
+	followLine(53); // Follow the line (Yep, this is really all it uses... This function is probably a little bit invalid. Oh well)
+}
+
+/**
+ * Program 1
+ * Roams around an open space avoiding obstacles
+ */
+void obstacleAvoid(){
+
+}
+
+/**
+ * Program 2
+ * Follows a line, avoiding obstacles that are on the line
+ */
+void lineFollowerAvoid(){
+
 }
 
 /**
  * Function to actually follow the line
  * @param speed Base speed to folow with
  */
-void follow(int speed){
+void followLine(int speed){
 	int dv = linePID.process(3500, line.readLine(sensor_values))/10; // Get the result of a PID process - Divide by 5 simply to make the constants larger numbers
 	if(TESTING && testing[0]){
 		Serial.print("Left: ");
@@ -197,15 +234,18 @@ void calibrate(int motor_speed){
 * 	Min - 0, however radiant IR seems to float it up to a reading of ~15
 */
 bool isBlocked(){
-	short threshold = 266; // Store the maximum number for an object that is MORE than 100mm away from the sensor
-	return analogRead(MID_IR) > threshold; // Return a boolean representing whether the robot has been obstructed
+	return analogRead(MID_IR) > IR_THRESHOLD; // Return a boolean representing whether the robot has been obstructed
 }
 
 /**
  * Function to move the robot around an obstacle
+ *
+ * @param baseSpeed The base speed to move the robot around the obstacle at
  */
-void avoidObstacle(){
+void avoidObstacle(int baseSpeed){
 	int tolerance = 30; // Margin of error allowed when correcting position to align with the object
+
+	wallPID.reset(); // Reset the PID controller for the wall follower
 
 	// Spin until the right sensor is aligned with the object
 	int maxRead = 0;
@@ -218,7 +258,21 @@ void avoidObstacle(){
 	}
 
 	// Once the loop cancels, we have reached a drop in readings, start following the object
-	motors.setMotors(0,0);
+	motors.setMotors(baseSpeed,baseSpeed);
+
+
+	int pid_reading = 0; // Initialise the PID variable
+
+	while(true){ // MAKE THIS NOT WHILE TRUE
+		pid_reading = wallPID.process(IR_OBJECT_THRESHOLD, analogRead(RIGHT_IR)); // Get the first PID reading
+
+		Serial.print("SENSOR: ");
+		Serial.print(analogRead(RIGHT_IR));
+		Serial.print("  PID: ");
+		Serial.println(pid_reading);
+
+		motors.setMotors(baseSpeed + pid_reading, baseSpeed - pid_reading); // Set the motors to account for PID
+	}
 }
 
 /**
