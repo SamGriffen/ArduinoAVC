@@ -76,6 +76,10 @@ void setup(){
 	// pinMode(P_PIN, INPUT);
 	// pinMode(D_PIN, INPUT);
 
+	// Setup the DIP Swtich
+	pinMode(DIP_1, INPUT_PULLUP);
+	pinMode(DIP_2, INPUT_PULLUP);
+
 	// Setup the IR sensor pins
 	pinMode(LEFT_IR, INPUT);
 	pinMode(MID_IR, INPUT);
@@ -99,8 +103,20 @@ void loop(){
 	// For potentiometer tuning
 	// linePID.setConstants(mapDouble(analogRead(P_PIN), 0.00, 1023.0, 0.0, 0.5), 0.0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 0.5));
 
-	short program = digitalRead(DIP_1) && (digitalRead(DIP_2) << 1); // Read the dipswitch
-	Serial.println(program);
+	short program = !digitalRead(DIP_1) | (!digitalRead(DIP_2) << 1); // Read the dipswitch
+
+	// Set the correct program based on the DIP Switch input
+	switch(program){
+		case 0:
+			lineFollower();
+			break;
+		case 1:
+			obstacleAvoid();
+			break;
+		case 2:
+			lineFollowerAvoid();
+			break;
+	}
 }
 
 /**
@@ -122,7 +138,24 @@ void lineFollower(){
  * Roams around an open space avoiding obstacles
  */
 void obstacleAvoid(){
+	short baseSpeed = 100;
 
+	if(isBlocked()){ // If the robot is obstructed, dodge the obstacle
+
+		Serial.print("LEFT: ");
+		Serial.print(analogRead(LEFT_IR));
+		Serial.print("RIGHT: ");
+		Serial.println(analogRead(RIGHT_IR));
+
+		bool leftClear = analogRead(LEFT_IR) < analogRead(RIGHT_IR); // Detect which side is the clearest to move into. High reading means nearby object.
+
+		while(isBlocked()){ // While there is an obstacle, avoid it. This will ignore any program swaps until the object is avoided
+			motors.setMotors(baseSpeed * (leftClear?-1:1), baseSpeed * (leftClear?1:-1)); // Set the motors. ternary operation should set rotate direction
+		}
+	}
+	else{
+		motors.setMotors(baseSpeed, baseSpeed);
+	}
 }
 
 /**
@@ -228,7 +261,7 @@ void calibrate(int motor_speed){
 
 /* Functions for moving around obstacles */
 
-/** Method to determine whether the robot is blocked by an obstacle. Returns true if blocked, false otherwise. Reads from the front sensor
+/** Method to determine whether the robot is blocked by an obstacle. Returns true if blocked, false otherwise. Reads from the front sensorWhile loops throughout the code will cause dela
 *	As far as my testing shows, the reading increases as objects get closer
 *	Max - Seems to be about 620 @ ~2cm away from sensor
 * 	Min - 0, however radiant IR seems to float it up to a reading of ~15
