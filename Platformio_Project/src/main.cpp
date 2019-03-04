@@ -3,7 +3,7 @@
 #include "VicMoto.h"				// Include the small utility functions for motor control
 #include "PID.h"					// Include the PID controller code
 
-#define NUM_SENSORS             8  	// number of sensors used
+#define NUM_SENSORS             6  	// number of sensors used
 
 #define STATUS_LED				A2	// Pin for the status LED
 
@@ -13,7 +13,10 @@
 #define FOLLOW_MIN_SPEED -255
 
 #define IR_THRESHOLD 266 			// Store the maximum number for an object that is MORE than 100mm away from the sensor
-#define IR_OBJECT_THRESHOLD 310		// IR reading to target when following an object
+#define IR_OBJECT_THRESHOLD 250		// IR reading to target when following an object
+
+#define IR_LEFT_THRESHOLD 310 		// IR Threshold for the left IR sensor - Used for obstacle avoidance
+#define IR_RIGHT_THRESHOLD 310 		// IR Threshold for right sensor - Used for obstacle avoidance
 
 // Pins for sensor readings
 #define LEFT_IR					A5
@@ -25,9 +28,11 @@
 #define DIP_2	A0
 
 // Initialise the sensor array - As far as I can tell it is some form of Pololu QTR-RC array. Documentation of the library found here: https://www.pololu.com/docs/0J19/3
-QTRSensorsRC line((unsigned char[]) {2, 4, 5, 6, 7, 8, 9, 10}, NUM_SENSORS);
+QTRSensorsRC line((unsigned char[]) {4, 5, 6, 7, 8, 9}, NUM_SENSORS);
 
 unsigned int sensor_values[NUM_SENSORS]; // Values from the line sensor
+
+bool calibrated = false; // Stores whether or not a calibration sequence has been performed
 
 // Definitions for the potentiometers that may be used for tuning
 // #define P_PIN A5
@@ -38,8 +43,10 @@ unsigned int sensor_values[NUM_SENSORS]; // Values from the line sensor
  * testing[0] - Stores whether to print motor setting data in the main loop
  * testing[1] - Stores whether to print mid IR sensor readings
  * testing[2] - Stores whether to print data from the right sensor while rotating to be in line with an obstacle
+ * testing[3] - Stores whether to print the speed difference in obstacleAvoider mode
+ * testing[4] - Stores whether to print debug data in the lineFollowerAvoid function
  */
-bool testing[3] = {0, 0, 1};
+bool testing[5] = {0, 0, 0, 0, 1};
 
 // Initialise the motor driver
 VicMoto motors;
@@ -56,7 +63,7 @@ PID wallPID(0.25,0,0.15);
 
 // Funtion declarations for different programs
 void lineFollower();		// Program for following a line - Program 0
-void obstacleAvoid();		// Program for roaming artound avoiding obstacles - Program 1
+void obstacleAvoider();		// Program for roaming artound avoiding obstacles - Program 1
 void lineFollowerAvoid();	// Program for line following, avoiding any obstacles on the line - Program 2
 
 // Function declarations for line following control
@@ -65,10 +72,16 @@ void findLine(int speed); // Finds the line
 void followLine(int speed); // Follows the line
 
 // Functions for obstacle avoidance
-bool isBlocked(); // Returns true if the robot has been obstructed, false otherwise
+bool isBlocked(int thres=IR_THRESHOLD); // Returns true if the robot has been obstructed, false otherwise
 void avoidObstacle(int baseSpeed); // Manouvers the object around an obstacle. Looks for the line to return and for there to be nothing in front of the robot.
 
 double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh); // Map a number doing double math
+
+void printSensorArray(); // Function to print out the sensor array for debugging
+
+short readDIPSwitch(){ // Small helper function for reading the status of the DIPSwitch
+	return !digitalRead(DIP_1) | (!digitalRead(DIP_2) << 1);
+}
 
 void setup(){
 
@@ -93,8 +106,6 @@ void setup(){
 
 	pinMode(STATUS_LED, OUTPUT);
 
-
-
 	//calibrate(65); // Calibrate the line sensor
 	//findLine(60); // Find the line
 }
@@ -103,17 +114,17 @@ void loop(){
 	// For potentiometer tuning
 	// linePID.setConstants(mapDouble(analogRead(P_PIN), 0.00, 1023.0, 0.0, 0.5), 0.0, mapDouble(analogRead(D_PIN), 0.0, 1023.0, 0.0, 0.5));
 
-	short program = !digitalRead(DIP_1) | (!digitalRead(DIP_2) << 1); // Read the dipswitch
-
 	// Set the correct program based on the DIP Switch input
-	switch(program){
+	switch(readDIPSwitch()){
 		case 0:
+			if(!calibrated)calibrate(60);
 			lineFollower();
 			break;
 		case 1:
-			obstacleAvoid();
+			obstacleAvoider();
 			break;
 		case 2:
+			if(!calibrated)calibrate(60);
 			lineFollowerAvoid();
 			break;
 	}
@@ -137,15 +148,10 @@ void lineFollower(){
  * Program 1
  * Roams around an open space avoiding obstacles
  */
-void obstacleAvoid(){
+void obstacleAvoider(){
 	short baseSpeed = 100;
 
 	if(isBlocked()){ // If the robot is obstructed, dodge the obstacle
-
-		Serial.print("LEFT: ");
-		Serial.print(analogRead(LEFT_IR));
-		Serial.print("RIGHT: ");
-		Serial.println(analogRead(RIGHT_IR));
 
 		bool leftClear = analogRead(LEFT_IR) < analogRead(RIGHT_IR); // Detect which side is the clearest to move into. High reading means nearby object.
 
@@ -154,7 +160,12 @@ void obstacleAvoid(){
 		}
 	}
 	else{
-		motors.setMotors(baseSpeed, baseSpeed);
+		// Calculate the difference between the readings from the left and right sensors if they are over the threshold - This essentially allows the robot to steer itself away from obstacles. If this value is positive it means that tehre is a bigger reading on the left. If it is negative, there is a bigger reading on the right
+		short dv = constrain(analogRead(LEFT_IR) - IR_LEFT_THRESHOLD, 0, 1023) - constrain(analogRead(RIGHT_IR) - IR_RIGHT_THRESHOLD, 0, 1023)/4;
+
+		if(TESTING && testing[3])Serial.println(dv);
+
+		motors.setMotors(baseSpeed + dv, baseSpeed - dv);
 	}
 }
 
@@ -163,7 +174,23 @@ void obstacleAvoid(){
  * Follows a line, avoiding obstacles that are on the line
  */
 void lineFollowerAvoid(){
+	if(TESTING && testing[4])Serial.println(analogRead(MID_IR));
+	if(isBlocked(IR_THRESHOLD + 150)){ // If the robot encounters an obstacle, avoid it
+		if(TESTING && testing[4]){
+			Serial.println("BLOCKED");
+		}
 
+		while(analogRead(MID_IR) > (IR_THRESHOLD)){
+			motors.setMotors(-53, -53);
+		}
+
+		motors.setMotors(0, 0);
+
+		avoidObstacle(53);
+	}
+	else{
+		followLine(53); // Follow the line as usual
+	}
 }
 
 /**
@@ -256,6 +283,8 @@ void calibrate(int motor_speed){
 		Serial.println();
 		Serial.println();
 	}
+
+	calibrated = true; // The robot is now calibrated
 }
 
 
@@ -265,9 +294,11 @@ void calibrate(int motor_speed){
 *	As far as my testing shows, the reading increases as objects get closer
 *	Max - Seems to be about 620 @ ~2cm away from sensor
 * 	Min - 0, however radiant IR seems to float it up to a reading of ~15
+*
+* 	@param thres the IR threshold to count as blocked
 */
-bool isBlocked(){
-	return analogRead(MID_IR) > IR_THRESHOLD; // Return a boolean representing whether the robot has been obstructed
+bool isBlocked(int thres = IR_THRESHOLD){
+	return analogRead(MID_IR) > thres; // Return a boolean representing whether the robot has been obstructed
 }
 
 /**
@@ -276,27 +307,37 @@ bool isBlocked(){
  * @param baseSpeed The base speed to move the robot around the obstacle at
  */
 void avoidObstacle(int baseSpeed){
-	int tolerance = 30; // Margin of error allowed when correcting position to align with the object
-
 	wallPID.reset(); // Reset the PID controller for the wall follower
 
-	// Spin until the right sensor is aligned with the object
-	int maxRead = 0;
-	int reading = 0; // Stores the IR reading
-	motors.setMotors(-60,60); // Set the robot spinning
-	while(analogRead(RIGHT_IR) > maxRead - tolerance){ // While the reading is still increasing
-		reading = analogRead(RIGHT_IR);
-		if(reading > maxRead)maxRead = analogRead(RIGHT_IR); // Save the new reading if it is greater than the maximum
-		Serial.println(reading);
+	motors.setMotors(-60,0); // Set the robot spinning
+	while(sensor_values[NUM_SENSORS-1 -1] < 500){ // Align the leftmost sensor with the line
+		line.readCalibrated(sensor_values);
+		printSensorArray();
 	}
 
-	// Once the loop cancels, we have reached a drop in readings, start following the object
-	motors.setMotors(baseSpeed,baseSpeed);
+	delay(1000);
 
+	// Align the rightmost sensor to the line
+	motors.setMotors(0, 60);
+	while(sensor_values[0] < 500){
+		line.readCalibrated(sensor_values);
+		Serial.println(sensor_values[0]);
+	}
+
+	delay(5000);
+
+	// Once the loop ends, we need to move off the line
+	while(sensor_values[0] > 500 && sensor_values[NUM_SENSORS-1 -1] > 500){
+		motors.setMotors(50, 50);
+	}
+
+	// Start following the object
 
 	int pid_reading = 0; // Initialise the PID variable
 
-	while(true){ // MAKE THIS NOT WHILE TRUE
+	while(sensor_values[2] < 500 && sensor_values[3] < 500){ // MAKE THIS NOT WHILE TRUE
+		line.readCalibrated(sensor_values); // Read the line sensor
+
 		pid_reading = wallPID.process(IR_OBJECT_THRESHOLD, analogRead(RIGHT_IR)); // Get the first PID reading
 
 		Serial.print("SENSOR: ");
@@ -320,4 +361,15 @@ void avoidObstacle(int baseSpeed){
 double mapDouble(double value, double fromLow, double fromHigh, double toLow, double toHigh){
 	double prop = value/(fromHigh - fromLow);
 	return (prop * (toHigh - toLow))+toLow;
+}
+
+// Prints out the sensor array
+void printSensorArray(){
+	Serial.print("{");
+	for(int i = 0; i < NUM_SENSORS-1; i++){
+		Serial.print(sensor_values[i]);
+		Serial.print(",");
+	}
+	Serial.print(sensor_values[NUM_SENSORS-1]);
+	Serial.println("}");
 }
