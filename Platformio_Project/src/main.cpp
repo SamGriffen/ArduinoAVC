@@ -309,26 +309,20 @@ bool isBlocked(int thres = IR_THRESHOLD){
 void avoidObstacle(int baseSpeed){
 	wallPID.reset(); // Reset the PID controller for the wall follower
 
-	motors.setMotors(-60,0); // Set the robot spinning
-	while(sensor_values[NUM_SENSORS-1 -1] < 500){ // Align the leftmost sensor with the line
-		line.readCalibrated(sensor_values);
-		printSensorArray();
-	}
-
-	delay(1000);
-
 	// Align the rightmost sensor to the line
 	motors.setMotors(0, 60);
-	while(sensor_values[0] < 500){
+	Serial.println("RIGHT");
+	short state = 0; // Store the current state
+	long last_read = millis();
+	while(state != 2){
 		line.readCalibrated(sensor_values);
-		Serial.println(sensor_values[0]);
-	}
-
-	delay(5000);
-
-	// Once the loop ends, we need to move off the line
-	while(sensor_values[0] > 500 && sensor_values[NUM_SENSORS-1 -1] > 500){
-		motors.setMotors(50, 50);
+		if(state == 0 && sensor_values[2] > 500){ // Transition onto the line
+			state++;
+			last_read = millis();
+		}
+		else if(state == 1 && sensor_values[2] < 500 && millis() - last_read > 100){ // Transition oof the line
+			state++;
+		}
 	}
 
 	// Start following the object
